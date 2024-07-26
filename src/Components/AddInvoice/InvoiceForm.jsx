@@ -1,38 +1,47 @@
 import React from "react";
 import { FaRegEye } from "react-icons/fa";
 
-const InvoiceForm = () => {
+const InvoiceForm = ({ handleCategoryChange }) => {
   return (
     <div className="p-4 border-b-2 border-[#666363] lg:mx-3 md:flex items-center justify-between gap-20 px-5">
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">To</label>
-          <select className="mt-1  w-full py-2 px-3 border border-gray-300 bg-white rounded-md  focus:outline-none  sm:text-sm">
-            <option>Walk-in Customer</option>
+          <select
+            onChange={(e) => {
+              handleCategoryChange("to", e.target.value);
+            }}
+            className="mt-1 w-full py-2 px-3 border border-gray-300 bg-white rounded-md focus:outline-none sm:text-sm">
+            <option value="">Select Customer</option>
+            <option value="Walk-in Customer">Walk-in Customer</option>
           </select>
         </div>
 
-        {/* start Date */}
+        {/* Start Date */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Date
           </label>
           <input
             type="date"
-            className="mt-1 block w-full py-2 px-3 border border-gray-300  rounded-md  focus:outline-none  sm:text-sm"
-            defaultValue="2024-07-11"
+            onChange={(e) => {
+              handleCategoryChange("startDate", e.target.value);
+            }}
+            className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
           />
         </div>
 
-        {/* end Date */}
+        {/* End Date */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Due Date
           </label>
           <input
             type="date"
-            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md focus:outline-none  sm:text-sm"
-            defaultValue="2024-07-16"
+            onChange={(e) => {
+              handleCategoryChange("endDate", e.target.value);
+            }}
+            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md focus:outline-none sm:text-sm"
           />
         </div>
 
@@ -43,8 +52,10 @@ const InvoiceForm = () => {
           </label>
           <input
             type="text"
-            className="mt-1 block w-full py-2 px-3 border border-gray-300  rounded-md focus:outline-none  sm:text-sm"
-            defaultValue="INV-0008"
+            onChange={(e) => {
+              handleCategoryChange("invoice", e.target.value);
+            }}
+            className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
           />
         </div>
 
@@ -55,7 +66,10 @@ const InvoiceForm = () => {
           </label>
           <input
             type="text"
-            className="mt-1 block w-full py-2 px-3 border border-gray-300  rounded-md focus:outline-none  sm:text-sm"
+            onChange={(e) => {
+              handleCategoryChange("reference", e.target.value);
+            }}
+            className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
             placeholder="Enter reference"
           />
         </div>
