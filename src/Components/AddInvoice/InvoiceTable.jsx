@@ -6,20 +6,9 @@ const InvoiceTable = ({
   handleInputChange,
   setTaxRate,
   taxRate,
+  setAccount,
+  account,
 }) => {
-  // const [selectedRate, setSelectedRate] = useState();
-
-  // const extratNumber = (arr) => {
-  //   const stringValue = Array.isArray(arr) ? arr[0] || "" : "";
-  //   const parts = stringValue.split("@");
-
-  //   if (parts.length > 1) {
-  //     return parts[1].replace("%", "");
-  //   }
-  //   return "";
-  // };
-
-  // console.log(extratNumber(price));
   return (
     <div className="mx-4 bg-white shadow-md rounded-md overflow-x-auto mt-4">
       <table className="min-w-full divide-y divide-gray-200">
@@ -103,7 +92,7 @@ const InvoiceTable = ({
                   className=" outline-none w-full px-2"
                   placeholder="Qty"
                   onChange={(e) => {
-                    handleInputChange(item?.id, "qty", e.target.value);
+                    handleInputChange(item?.id, "Qty", e.target.value);
                   }}
                 />
               </td>
@@ -129,16 +118,48 @@ const InvoiceTable = ({
                   }}
                 />
               </td>
-              <td className=" border border-gray-200 w-32 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td
+                onClick={() => {
+                  setAccount(!account);
+                }}
+                className=" border border-gray-200 w-32 py-4 whitespace-nowrap text-sm text-gray-900">
                 {" "}
                 <input
                   type="text"
                   className="w-full outline-none px-2"
                   placeholder="Account"
+                  value={item?.account}
                   onChange={(e) => {
                     handleInputChange(item?.id, "account", e.target.value);
                   }}
                 />
+                {account && (
+                  <div className="absolute mt-1 bg-white border border-gray-200 rounded shadow-lg z-10">
+                    <ul className="py-1">
+                      <li
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                        onClick={() =>
+                          handleInputChange(item?.id, "account", "Bank")
+                        }>
+                        Bank
+                      </li>
+                      <li
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                        onClick={() =>
+                          handleInputChange(item?.id, "account", "Card")
+                        }>
+                        Card
+                      </li>
+                      <li
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                        onClick={() =>
+                          handleInputChange(item?.id, "account", "Cash")
+                        }>
+                        Cash
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </td>
               <td
                 onClick={() => setTaxRate(!taxRate)}
