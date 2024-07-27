@@ -8,7 +8,14 @@ const InvoiceTable = ({
   taxRate,
   setAccount,
   account,
+  getData,
 }) => {
+  const categoryData = getData?.items;
+  // const getCategoryData = (itemData) => {
+  //   const getData = categoryData?.map((item) => item?.itemData);
+  //   return getData;
+  // };
+
   return (
     <div className="mx-4 bg-white shadow-md rounded-md overflow-x-auto mt-4">
       <table className="min-w-full divide-y divide-gray-200">
@@ -72,6 +79,10 @@ const InvoiceTable = ({
                   onChange={(e) => {
                     handleInputChange(item?.id, "item", e.target.value);
                   }}
+                  value={
+                    categoryData?.map((item) => item?.item) ||
+                    addMoreItems?.item
+                  }
                 />
               </td>
               <td className=" border border-gray-200 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -83,6 +94,10 @@ const InvoiceTable = ({
                   onChange={(e) => {
                     handleInputChange(item?.id, "description", e.target.value);
                   }}
+                  value={
+                    categoryData?.map((item) => item?.description) ||
+                    addMoreItems?.description
+                  }
                 />
               </td>
               <td className=" border border-gray-200 w-12 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -94,6 +109,9 @@ const InvoiceTable = ({
                   onChange={(e) => {
                     handleInputChange(item?.id, "Qty", e.target.value);
                   }}
+                  value={
+                    categoryData?.map((item) => item?.Qty) || addMoreItems?.Qty
+                  }
                 />
               </td>
               <td className=" border border-gray-200 w-32 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -105,6 +123,10 @@ const InvoiceTable = ({
                   onChange={(e) => {
                     handleInputChange(item?.id, "unitPrice", e.target.value);
                   }}
+                  value={
+                    categoryData?.map((item) => item?.unitPrice) ||
+                    addMoreItems?.unitPrice
+                  }
                 />
               </td>
               <td className=" border border-gray-200 w-24 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -113,9 +135,10 @@ const InvoiceTable = ({
                   type="text"
                   className="w-full outline-none px-2"
                   placeholder="Disc%"
-                  onChange={(e) => {
-                    handleInputChange(item?.id, "disc", e.target.value);
-                  }}
+                  value={
+                    categoryData?.map((item) => item?.disc) ||
+                    addMoreItems?.disc
+                  }
                 />
               </td>
               <td
@@ -128,7 +151,9 @@ const InvoiceTable = ({
                   type="text"
                   className="w-full outline-none px-2"
                   placeholder="Account"
-                  value={item?.account}
+                  value={
+                    categoryData?.map((item) => item?.account) || item?.account
+                  }
                   onChange={(e) => {
                     handleInputChange(item?.id, "account", e.target.value);
                   }}
@@ -169,7 +194,9 @@ const InvoiceTable = ({
                   className="w-full outline-none px-2"
                   type="text"
                   placeholder="Tax Rate"
-                  value={item?.taxRate}
+                  value={
+                    categoryData?.map((item) => item?.taxRate) || item?.taxRate
+                  }
                   onChange={(e) => {
                     handleInputChange(item?.id, "taxRate", e.target.value);
                   }}
@@ -216,6 +243,9 @@ const InvoiceTable = ({
                   onChange={(e) => {
                     handleInputChange(item?.id, "amount", e.target.value);
                   }}
+                  value={
+                    categoryData?.map((item) => item?.amount) || item?.amount
+                  }
                 />
               </td>
               <td className=" border border-gray-200 py-4 whitespace-nowrap text-sm text-gray-900">

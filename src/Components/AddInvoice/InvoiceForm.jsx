@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegEye } from "react-icons/fa";
 
-const InvoiceForm = ({ handleCategoryChange }) => {
-  const RandomInvoice = () => {
-    const random = Math.floor(Math.random() * 9000);
-    return random;
-  };
+const InvoiceForm = ({ handleCategoryChange, getData, category }) => {
+  const [randomInvoice, setRandomInvoice] = useState();
+
+  useEffect(() => {
+    setRandomInvoice(Math.floor(Math.random() * 9000));
+  }, []);
+
+  const categoryData = getData?.category;
 
   return (
     <div className="p-4 border-b-2 border-[#666363] lg:mx-3 md:flex items-center justify-between gap-20 px-5">
@@ -13,9 +16,8 @@ const InvoiceForm = ({ handleCategoryChange }) => {
         <div>
           <label className="block text-sm font-medium text-gray-700">To</label>
           <select
-            onChange={(e) => {
-              handleCategoryChange("to", e.target.value);
-            }}
+            onChange={(e) => handleCategoryChange("to", e.target.value)}
+            value={categoryData?.to || category?.to}
             className="mt-1 w-full py-2 px-3 border border-gray-300 bg-white rounded-md focus:outline-none sm:text-sm">
             <option value="">Select Customer</option>
             <option value="Walk-in Customer">Walk-in Customer</option>
@@ -29,9 +31,8 @@ const InvoiceForm = ({ handleCategoryChange }) => {
           </label>
           <input
             type="date"
-            onChange={(e) => {
-              handleCategoryChange("startDate", e.target.value);
-            }}
+            onChange={(e) => handleCategoryChange("startDate", e.target.value)}
+            value={categoryData?.startDate || category?.startDate}
             className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
           />
         </div>
@@ -43,9 +44,8 @@ const InvoiceForm = ({ handleCategoryChange }) => {
           </label>
           <input
             type="date"
-            onChange={(e) => {
-              handleCategoryChange("endDate", e.target.value);
-            }}
+            onChange={(e) => handleCategoryChange("endDate", e.target.value)}
+            value={categoryData?.endDate || category?.endDate}
             className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md focus:outline-none sm:text-sm"
           />
         </div>
@@ -57,11 +57,9 @@ const InvoiceForm = ({ handleCategoryChange }) => {
           </label>
           <input
             type="text"
-            onChange={(e) => {
-              handleCategoryChange("invoice", e.target.value);
-            }}
+            onChange={(e) => handleCategoryChange("invoice", e.target.value)}
+            value={categoryData?.invoice || `INV-${randomInvoice}`}
             className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
-            defaultValue={`INV-${RandomInvoice()}`}
           />
         </div>
 
@@ -72,9 +70,8 @@ const InvoiceForm = ({ handleCategoryChange }) => {
           </label>
           <input
             type="text"
-            onChange={(e) => {
-              handleCategoryChange("reference", e.target.value);
-            }}
+            onChange={(e) => handleCategoryChange("reference", e.target.value)}
+            value={categoryData?.reference || category?.reference}
             className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
             placeholder="Enter reference"
           />

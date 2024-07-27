@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import InvoiceForm from "./InvoiceForm";
 import InvoiceInput from "./InvoiceInput";
 import InvoiceTable from "./InvoiceTable";
+import History from "./History";
+
+import Swal from "sweetalert2";
 
 const Invoice = () => {
   const [taxRate, setTaxRate] = useState(false);
@@ -21,12 +24,16 @@ const Invoice = () => {
     },
   ]);
 
+  const getData = JSON.parse(localStorage.getItem("combinedData"));
+  const amount = getData?.amount;
+
   const [category, setCategory] = useState();
   const [expences, setExpences] = useState();
   const [subTotal, setSubTotal] = useState(0);
   const [tax, setTax] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
+  console.log(category);
   // this is to add more form fields
   const handleAddMore = () => {
     setAddMoreItems([
@@ -63,17 +70,6 @@ const Invoice = () => {
     setExpences((prevExpences) => ({ ...prevExpences, [field]: value }));
   };
 
-  const handleSaveData = () => {
-    // i have to send this to localStorage
-    const combinedData = {
-      addMoreItems,
-      category,
-      expences,
-    };
-    // localStorage.setItem("combinedData", JSON.stringify(combinedData));
-    console.log(combinedData);
-  };
-
   const calculateSubTotal = () => {
     let subTotal = 0;
     let tax = 0;
@@ -92,13 +88,47 @@ const Invoice = () => {
     calculateSubTotal();
   }, [addMoreItems]);
 
+  const handleSaveData = () => {
+    // i have to send this to localStorage
+    const combinedData = {
+      items: addMoreItems,
+      category,
+      expences,
+      amount: {
+        totalPrice,
+        tax,
+        subTotal,
+      },
+    };
+    localStorage.setItem("combinedData", JSON.stringify(combinedData));
+    if (localStorage.getItem("combinedData")) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Invoice has been saved",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="w-full ">
       <div className=" lg:pl-44 h-auto">
         <div className="bg-[#e4e4e4] mx-3 h-auto py-5 mt-5">
-          <InvoiceForm handleCategoryChange={handleCategoryChange} />
-          <InvoiceInput handleExpencesChange={handleExpencesChange} />
+          <InvoiceForm
+            getData={getData}
+            handleCategoryChange={handleCategoryChange}
+            category={category}
+          />
+          <InvoiceInput
+            getData={getData}
+            handleExpencesChange={handleExpencesChange}
+            expences={expences}
+          />
           <InvoiceTable
+            getData={getData}
             addMoreItems={addMoreItems}
             handleInputChange={handleInputChange}
             setTaxRate={setTaxRate}
@@ -107,32 +137,55 @@ const Invoice = () => {
             account={account}
           />
 
-          <div className="px-5 mt-4 flex items-center justify-between ">
+          <div className="px-5 mt-4 md:flex items-center justify-between ">
             <div>
               <button
                 onClick={handleAddMore}
-                className="px-7 py-2 bg-green-500 text-white">
-                Add More
-              </button>
-
-              <button
-                onClick={handleSaveData}
-                className="px-7 ml-5 py-2 bg-green-500 text-white">
-                Save
+                className="px-7 py-2 bg-[#e8faf7] text-[#464545] font-semibold text-sm rounded-xl">
+                Add New Line
               </button>
             </div>
-            <div className="">
-              <p className="space-x-20">
-                subTotal Price: <span>{isNaN(subTotal) ? "" : subTotal}</span>
+            <div className="mt-4">
+              <p className="flex justify-between gap-5 text-blue-600 font-semibold">
+                SubTotal Price:{" "}
+                <span className="flex-grow text-right">
+                  {!isNaN(amount?.subTotal ?? subTotal)
+                    ? amount?.subTotal ?? subTotal
+                    : 0}
+                </span>
               </p>
-              <p className="space-x-20">
-                tax : <span>{isNaN(tax) ? "" : tax}</span>{" "}
+              <p className="flex justify-between text-gray-800 font-semibold">
+                tax :{" "}
+                <span className="flex-grow text-right">
+                  {!isNaN(amount?.tax ?? tax) ? amount?.tax ?? tax : 0}
+                </span>{" "}
               </p>
-              <p className="space-x-20">
-                Total : <span> {isNaN(totalPrice) ? "" : totalPrice}</span>{" "}
+              <p className="flex justify-between text-green-600 font-semibold">
+                Total :{" "}
+                <span className="flex-grow text-right">
+                  {" "}
+                  {!isNaN(amount?.totalPrice ?? totalPrice)
+                    ? amount?.totalPrice ?? totalPrice
+                    : 0}
+                </span>{" "}
               </p>
             </div>
           </div>
+        </div>
+        <div className="flex items-center justify-between px-10 border-b border-gray-300 mx-10 pb-5 mt-4">
+          <button
+            onClick={handleSaveData}
+            className="px-7 ml-5 py-2 bg-blue-600 text-white rounded-xl">
+            Save
+          </button>
+          <button
+            onClick={handleSaveData}
+            className="px-7 ml-5 py-2 bg-[#4bca4b] text-white rounded-xl">
+            Approve
+          </button>
+        </div>
+        <div>
+          <History getData={getData} />
         </div>
       </div>
     </div>
