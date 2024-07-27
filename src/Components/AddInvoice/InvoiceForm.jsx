@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaRegEye } from "react-icons/fa";
 
 const InvoiceForm = ({ handleCategoryChange }) => {
+  const RandomInvoice = () => {
+    const random = Math.floor(Math.random() * 9000);
+    return random;
+  };
+
   return (
     <div className="p-4 border-b-2 border-[#666363] lg:mx-3 md:flex items-center justify-between gap-20 px-5">
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -56,6 +61,7 @@ const InvoiceForm = ({ handleCategoryChange }) => {
               handleCategoryChange("invoice", e.target.value);
             }}
             className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
+            defaultValue={`INV-${RandomInvoice()}`}
           />
         </div>
 

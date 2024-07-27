@@ -1,7 +1,25 @@
 import { useState } from "react";
 import { RxDragHandleDots2 } from "react-icons/rx";
 
-const InvoiceTable = ({ addMoreItems, handleInputChange }) => {
+const InvoiceTable = ({
+  addMoreItems,
+  handleInputChange,
+  setTaxRate,
+  taxRate,
+}) => {
+  // const [selectedRate, setSelectedRate] = useState();
+
+  // const extratNumber = (arr) => {
+  //   const stringValue = Array.isArray(arr) ? arr[0] || "" : "";
+  //   const parts = stringValue.split("@");
+
+  //   if (parts.length > 1) {
+  //     return parts[1].replace("%", "");
+  //   }
+  //   return "";
+  // };
+
+  // console.log(extratNumber(price));
   return (
     <div className="mx-4 bg-white shadow-md rounded-md overflow-x-auto mt-4">
       <table className="min-w-full divide-y divide-gray-200">
@@ -52,8 +70,8 @@ const InvoiceTable = ({ addMoreItems, handleInputChange }) => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200 ">
-          {addMoreItems.map((item) => (
-            <tr key={item?.id} className="">
+          {addMoreItems.map((item, index) => (
+            <tr key={index} className="">
               <td>
                 <RxDragHandleDots2 />
               </td>
@@ -122,17 +140,52 @@ const InvoiceTable = ({ addMoreItems, handleInputChange }) => {
                   }}
                 />
               </td>
-              <td className=" border border-gray-200 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td
+                onClick={() => setTaxRate(!taxRate)}
+                className=" border border-gray-200 py-4 whitespace-nowrap text-sm text-gray-900">
                 {" "}
                 <input
-                  type="text"
                   className="w-full outline-none px-2"
+                  type="text"
                   placeholder="Tax Rate"
+                  value={item?.taxRate}
                   onChange={(e) => {
                     handleInputChange(item?.id, "taxRate", e.target.value);
                   }}
                 />
+                {taxRate && (
+                  <div className="absolute mt-1 bg-white border border-gray-200 rounded shadow-lg z-10">
+                    <ul className="py-1">
+                      <li
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                        onClick={() =>
+                          handleInputChange(
+                            item?.id,
+                            "taxRate",
+                            "Tax Exempt@0%"
+                          )
+                        }>
+                        Tax Exempt@0%
+                      </li>
+                      <li
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                        onClick={() =>
+                          handleInputChange(item?.id, "taxRate", "Standard@10%")
+                        }>
+                        Standard@10%
+                      </li>
+                      <li
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                        onClick={() =>
+                          handleInputChange(item?.id, "taxRate", "GST@15%")
+                        }>
+                        GST@15%
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </td>
+
               <td className=" border border-gray-200 py-4 whitespace-nowrap text-sm text-gray-900">
                 {" "}
                 <input
