@@ -32,8 +32,8 @@ const Invoice = () => {
   const [subTotal, setSubTotal] = useState(0);
   const [tax, setTax] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [isTaxInclusive, setIsTaxInclusive] = useState(false);
 
-  console.log(category);
   // this is to add more form fields
   const handleAddMore = () => {
     setAddMoreItems([
@@ -67,6 +67,9 @@ const Invoice = () => {
   };
 
   const handleExpencesChange = (field, value) => {
+    if (field === "tax") {
+      setIsTaxInclusive(value === "inclusive");
+    }
     setExpences((prevExpences) => ({ ...prevExpences, [field]: value }));
   };
 
@@ -76,17 +79,28 @@ const Invoice = () => {
 
     addMoreItems?.forEach((item) => {
       const rowTotal = parseInt(item?.Qty) * parseFloat(item?.unitPrice);
-      subTotal += rowTotal;
-      tax += (rowTotal * item?.taxRate.split(/@(\d+).*/)[1]) / 100;
+      const taxRate = parseFloat(item?.taxRate.split(/@(\d+).*/)[1]);
+
+      if (isTaxInclusive) {
+        const basePrice = rowTotal / (1 + taxRate / 100);
+        const taxAmount = rowTotal - basePrice;
+        subTotal += basePrice;
+        tax += taxAmount;
+      } else {
+        const taxAmount = (rowTotal * taxRate) / 100;
+        subTotal += parseFloat(rowTotal.toFixed(2));
+        tax += parseFloat(taxAmount.toFixed(2));
+      }
     });
-    setSubTotal(subTotal);
-    setTax(tax);
-    setTotalPrice(subTotal + tax);
+
+    setSubTotal(parseFloat(subTotal.toFixed(2)));
+    setTax(parseFloat(tax.toFixed(2)));
+    setTotalPrice(parseFloat((subTotal + tax).toFixed(2)));
   };
 
   useEffect(() => {
     calculateSubTotal();
-  }, [addMoreItems]);
+  }, [addMoreItems, isTaxInclusive]);
 
   const handleSaveData = () => {
     // i have to send this to localStorage

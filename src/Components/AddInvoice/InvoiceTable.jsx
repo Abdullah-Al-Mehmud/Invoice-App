@@ -79,7 +79,7 @@ const InvoiceTable = ({
                   onChange={(e) => {
                     handleInputChange(item?.id, "item", e.target.value);
                   }}
-                  value={
+                  defaultValue={
                     categoryData?.map((item) => item?.item) ||
                     addMoreItems?.item
                   }
@@ -94,7 +94,7 @@ const InvoiceTable = ({
                   onChange={(e) => {
                     handleInputChange(item?.id, "description", e.target.value);
                   }}
-                  value={
+                  defaultValue={
                     categoryData?.map((item) => item?.description) ||
                     addMoreItems?.description
                   }
@@ -109,7 +109,7 @@ const InvoiceTable = ({
                   onChange={(e) => {
                     handleInputChange(item?.id, "Qty", e.target.value);
                   }}
-                  value={
+                  defaultValue={
                     categoryData?.map((item) => item?.Qty) || addMoreItems?.Qty
                   }
                 />
@@ -123,7 +123,7 @@ const InvoiceTable = ({
                   onChange={(e) => {
                     handleInputChange(item?.id, "unitPrice", e.target.value);
                   }}
-                  value={
+                  defaultValue={
                     categoryData?.map((item) => item?.unitPrice) ||
                     addMoreItems?.unitPrice
                   }
@@ -135,7 +135,7 @@ const InvoiceTable = ({
                   type="text"
                   className="w-full outline-none px-2"
                   placeholder="Disc%"
-                  value={
+                  defaultValue={
                     categoryData?.map((item) => item?.disc) ||
                     addMoreItems?.disc
                   }
@@ -151,7 +151,7 @@ const InvoiceTable = ({
                   type="text"
                   className="w-full outline-none px-2"
                   placeholder="Account"
-                  value={
+                  defaultValue={
                     categoryData?.map((item) => item?.account) || item?.account
                   }
                   onChange={(e) => {
@@ -194,7 +194,7 @@ const InvoiceTable = ({
                   className="w-full outline-none px-2"
                   type="text"
                   placeholder="Tax Rate"
-                  value={
+                  defaultValue={
                     categoryData?.map((item) => item?.taxRate) || item?.taxRate
                   }
                   onChange={(e) => {
@@ -243,7 +243,7 @@ const InvoiceTable = ({
                   onChange={(e) => {
                     handleInputChange(item?.id, "amount", e.target.value);
                   }}
-                  value={
+                  defaultValue={
                     categoryData?.map((item) => item?.amount) || item?.amount
                   }
                 />
