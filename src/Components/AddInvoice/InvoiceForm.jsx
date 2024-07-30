@@ -5,9 +5,9 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import moment from "moment";
 
-const InvoiceForm = ({ handleCategoryChange, getData, category }) => {
+const InvoiceForm = ({ handleCategoryChange, getData }) => {
   const [randomInvoice, setRandomInvoice] = useState();
-  const [startDate, setStartDate] = useState(null);
+  const [startDate, setStartDate] = useState(getData?.startDate || null);
   const [formattedDate, setFormatedDate] = useState();
   const [writtenDate, setWrittenDate] = useState();
 
@@ -15,26 +15,17 @@ const InvoiceForm = ({ handleCategoryChange, getData, category }) => {
     setRandomInvoice(Math.floor(Math.random() * 9000));
   }, []);
 
-  const categoryData = getData?.category;
-
   const startedDate = new Date(startDate);
-
-  console.log(categoryData?.startDate);
-  console.log(categoryData?.endDate);
-
-  // let day = 60 * 60 * 24 * 1000;
-  // console.log(new Date(startDate.getTime() + 5));
 
   useEffect(() => {
     if (startDate && writtenDate) {
       const endedDate = new Date(
         startedDate.setDate(startedDate.getDate() + writtenDate)
       );
-      // const formattedDate = endedDate.format("YYYY/MM/DD");
-      // setFormatedDate(formattedDate)
+
       const formatted = moment(endedDate).format("YYYY/MM/DD");
       setFormatedDate(formatted);
-      handleCategoryChange("startDate", startDate);
+      handleCategoryChange("startDate", moment(startDate).format("YYYY/MM/DD"));
       handleCategoryChange("endDate", formatted);
     }
   }, [startDate, writtenDate]);
@@ -48,7 +39,7 @@ const InvoiceForm = ({ handleCategoryChange, getData, category }) => {
             onChange={(e) => {
               handleCategoryChange("to", e.target.value);
             }}
-            value={categoryData?.to || category?.to}
+            value={getData?.to}
             className="mt-1 w-full py-2 px-3 border border-gray-300 bg-white rounded-md focus:outline-none sm:text-sm">
             <option value="">Select Customer</option>
             <option value="Walk-in Customer">Walk-in Customer</option>
@@ -62,15 +53,11 @@ const InvoiceForm = ({ handleCategoryChange, getData, category }) => {
           </label>
           <DatePicker
             dateFormat="yyyy/MM/dd"
-            // onChange={(e) => {
-            //   handleCategoryChange("startDate", e.target.value);
-            //   setSelectedDate(e);
-            // }}
             onChange={(date) => {
               setStartDate(date);
             }}
-            selected={categoryData?.startDate || startDate}
-            // value={categoryData?.startDate || category?.startDate}
+            selected={startDate}
+            // value={getData?.startDate || category?.startDate}
             className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
           />
         </div>
@@ -82,14 +69,12 @@ const InvoiceForm = ({ handleCategoryChange, getData, category }) => {
           </label>
           <DatePicker
             dateFormat="yyyy/MM/dd"
-            // onChange={(e) => handleCategoryChange("endDate", e.target.value)}
             onKeyDown={(e) => {
               const date = e.target.value.split("+");
               setWrittenDate(parseInt(date[1]));
               // setEndDate(e);
             }}
-            selected={categoryData?.endDate || formattedDate}
-            // value={categoryData?.endDate || category?.endDate}
+            selected={getData?.endDate || formattedDate}
             className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md focus:outline-none sm:text-sm"
           />
         </div>
@@ -101,8 +86,8 @@ const InvoiceForm = ({ handleCategoryChange, getData, category }) => {
           </label>
           <input
             type="text"
-            onChange={(e) => handleCategoryChange("invoice", e.target.value)}
-            value={categoryData?.invoice || `INV-${randomInvoice}`}
+            onChange={() => handleCategoryChange("invoice", randomInvoice)}
+            defaultValue={`INV-${randomInvoice}`}
             className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
           />
         </div>
@@ -115,7 +100,7 @@ const InvoiceForm = ({ handleCategoryChange, getData, category }) => {
           <input
             type="text"
             onChange={(e) => handleCategoryChange("reference", e.target.value)}
-            value={categoryData?.reference || category?.reference}
+            value={getData?.reference || ""}
             className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
             placeholder="Enter reference"
           />

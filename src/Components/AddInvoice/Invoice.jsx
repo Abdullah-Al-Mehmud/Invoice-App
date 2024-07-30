@@ -5,8 +5,17 @@ import InvoiceTable from "./InvoiceTable";
 import History from "./History";
 
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setAmount,
+  setCategory,
+  setExpences,
+  setItems,
+} from "../../feature/invoiceSlice";
 
 const Invoice = () => {
+  const dispatch = useDispatch();
+  const invoiceData = useSelector((state) => state.invoice);
   const [taxRate, setTaxRate] = useState(false);
   const [account, setAccount] = useState(false);
 
@@ -24,11 +33,9 @@ const Invoice = () => {
     },
   ]);
 
-  const getData = JSON.parse(localStorage.getItem("combinedData"));
-  const amount = getData?.amount;
+  // const getData = JSON.parse(localStorage.getItem("combinedData"));
+  // const amount = getData?.amount;
 
-  const [category, setCategory] = useState();
-  const [expences, setExpences] = useState();
   const [subTotal, setSubTotal] = useState(0);
   const [tax, setTax] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -63,14 +70,14 @@ const Invoice = () => {
 
   // here im taking to,startDate,endDate value from InvoiceForm and setting them in a state
   const handleCategoryChange = (field, value) => {
-    setCategory((prevCategory) => ({ ...prevCategory, [field]: value }));
+    dispatch(setCategory({ ...invoiceData.category, [field]: value }));
   };
 
   const handleExpencesChange = (field, value) => {
     if (field === "tax") {
       setIsTaxInclusive(value === "inclusive");
     }
-    setExpences((prevExpences) => ({ ...prevExpences, [field]: value }));
+    dispatch(setExpences({ ...invoiceData.expences, [field]: value }));
   };
 
   const calculateSubTotal = () => {
@@ -103,28 +110,17 @@ const Invoice = () => {
   }, [addMoreItems, isTaxInclusive]);
 
   const handleSaveData = () => {
-    // i have to send this to localStorage
-    const combinedData = {
-      items: addMoreItems,
-      category,
-      expences,
-      amount: {
-        totalPrice,
-        tax,
-        subTotal,
-      },
-    };
-    localStorage.setItem("combinedData", JSON.stringify(combinedData));
-    if (localStorage.getItem("combinedData")) {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Invoice has been saved",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      window.location.reload();
-    }
+    dispatch(setItems(addMoreItems));
+    dispatch(setCategory(invoiceData.category));
+    dispatch(setExpences(invoiceData.expences));
+    dispatch(setAmount({ totalPrice, subTotal, tax }));
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Invoice has been saved",
+      showConfirmButton: false,
+      timer: 1500,
+    });
   };
 
   return (
@@ -132,17 +128,14 @@ const Invoice = () => {
       <div className=" lg:pl-44 h-auto">
         <div className="bg-[#e4e4e4] mx-3 h-auto py-5 mt-5">
           <InvoiceForm
-            getData={getData}
+            getData={invoiceData.category}
             handleCategoryChange={handleCategoryChange}
-            category={category}
           />
           <InvoiceInput
-            getData={getData}
+            getData={invoiceData}
             handleExpencesChange={handleExpencesChange}
-            expences={expences}
           />
           <InvoiceTable
-            getData={getData}
             addMoreItems={addMoreItems}
             handleInputChange={handleInputChange}
             setTaxRate={setTaxRate}
@@ -163,24 +156,20 @@ const Invoice = () => {
               <p className="flex justify-between gap-5 text-blue-600 font-semibold">
                 SubTotal Price:{" "}
                 <span className="flex-grow text-right">
-                  {!isNaN(amount?.subTotal ?? subTotal)
-                    ? amount?.subTotal ?? subTotal
-                    : 0}
+                  {!isNaN(subTotal) ? subTotal : 0}
                 </span>
               </p>
               <p className="flex justify-between text-gray-800 font-semibold">
                 tax :{" "}
                 <span className="flex-grow text-right">
-                  {!isNaN(amount?.tax ?? tax) ? amount?.tax ?? tax : 0}
+                  {!isNaN(tax) ? tax : 0}
                 </span>{" "}
               </p>
               <p className="flex justify-between text-green-600 font-semibold">
                 Total :{" "}
                 <span className="flex-grow text-right">
                   {" "}
-                  {!isNaN(amount?.totalPrice ?? totalPrice)
-                    ? amount?.totalPrice ?? totalPrice
-                    : 0}
+                  {!isNaN(totalPrice) ? totalPrice : 0}
                 </span>{" "}
               </p>
             </div>
@@ -199,7 +188,7 @@ const Invoice = () => {
           </button>
         </div>
         <div>
-          <History getData={getData} />
+          <History getData={invoiceData} />
         </div>
       </div>
     </div>

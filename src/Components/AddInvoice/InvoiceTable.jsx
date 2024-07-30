@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { RxDragHandleDots2 } from "react-icons/rx";
+import { useSelector } from "react-redux";
 
 const InvoiceTable = ({
   addMoreItems,
@@ -8,13 +9,15 @@ const InvoiceTable = ({
   taxRate,
   setAccount,
   account,
-  getData,
 }) => {
-  const categoryData = getData?.items;
+  // const categoryData = getData?.items;
   // const getCategoryData = (itemData) => {
   //   const getData = categoryData?.map((item) => item?.itemData);
   //   return getData;
   // };
+
+  const invoiceData = useSelector((state) => state.invoice);
+  const itemData = invoiceData.items;
 
   return (
     <div className="mx-4 bg-white shadow-md rounded-md overflow-x-auto mt-4">
@@ -80,8 +83,7 @@ const InvoiceTable = ({
                     handleInputChange(item?.id, "item", e.target.value);
                   }}
                   defaultValue={
-                    categoryData?.map((item) => item?.item) ||
-                    addMoreItems?.item
+                    itemData?.map((item) => item?.item) || addMoreItems?.item
                   }
                 />
               </td>
@@ -95,7 +97,7 @@ const InvoiceTable = ({
                     handleInputChange(item?.id, "description", e.target.value);
                   }}
                   defaultValue={
-                    categoryData?.map((item) => item?.description) ||
+                    itemData?.map((item) => item?.description) ||
                     addMoreItems?.description
                   }
                 />
@@ -110,7 +112,7 @@ const InvoiceTable = ({
                     handleInputChange(item?.id, "Qty", e.target.value);
                   }}
                   defaultValue={
-                    categoryData?.map((item) => item?.Qty) || addMoreItems?.Qty
+                    itemData?.map((item) => item?.Qty) || addMoreItems?.Qty
                   }
                 />
               </td>
@@ -124,7 +126,7 @@ const InvoiceTable = ({
                     handleInputChange(item?.id, "unitPrice", e.target.value);
                   }}
                   defaultValue={
-                    categoryData?.map((item) => item?.unitPrice) ||
+                    itemData?.map((item) => item?.unitPrice) ||
                     addMoreItems?.unitPrice
                   }
                 />
@@ -136,8 +138,7 @@ const InvoiceTable = ({
                   className="w-full outline-none px-2"
                   placeholder="Disc%"
                   defaultValue={
-                    categoryData?.map((item) => item?.disc) ||
-                    addMoreItems?.disc
+                    itemData?.map((item) => item?.disc) || addMoreItems?.disc
                   }
                 />
               </td>
@@ -151,9 +152,7 @@ const InvoiceTable = ({
                   type="text"
                   className="w-full outline-none px-2"
                   placeholder="Account"
-                  defaultValue={
-                    categoryData?.map((item) => item?.account) || item?.account
-                  }
+                  defaultValue={item?.account}
                   onChange={(e) => {
                     handleInputChange(item?.id, "account", e.target.value);
                   }}
@@ -194,9 +193,7 @@ const InvoiceTable = ({
                   className="w-full outline-none px-2"
                   type="text"
                   placeholder="Tax Rate"
-                  defaultValue={
-                    categoryData?.map((item) => item?.taxRate) || item?.taxRate
-                  }
+                  defaultValue={item?.taxRate}
                   onChange={(e) => {
                     handleInputChange(item?.id, "taxRate", e.target.value);
                   }}
@@ -244,7 +241,7 @@ const InvoiceTable = ({
                     handleInputChange(item?.id, "amount", e.target.value);
                   }}
                   defaultValue={
-                    categoryData?.map((item) => item?.amount) || item?.amount
+                    itemData?.map((item) => item?.amount) || item?.amount
                   }
                 />
               </td>
