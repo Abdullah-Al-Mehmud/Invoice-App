@@ -1,7 +1,7 @@
 const History = ({ getData }) => {
   const amount = getData?.amount;
   const category = getData?.category;
-  console.log(category.invoice);
+
   return (
     <div className="px-10 pt-4 mt-4 mb-5">
       <p className="font-semibold text-gray-500">History & Notes</p>
